@@ -1,5 +1,5 @@
 {
-  "name": "mixstart/mix-websocket",
+  "name": "mix/websocket",
   "description": "MixPHP 框架模块 http://www.mixphp.cn",
   "type": "framework",
   "keywords": [
