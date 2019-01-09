@@ -2,13 +2,13 @@
 
 namespace Mix\WebSocket;
 
-use Mix\Core\BaseObject;
+use Mix\Core\DIObject;
 
 /**
  * Controller类
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class Controller extends BaseObject
+class Controller extends DIObject
 {
 
     /**
