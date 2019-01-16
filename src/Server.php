@@ -2,14 +2,14 @@
 
 namespace Mix\WebSocket;
 
-use Mix\Core\DIObject;
+use Mix\Core\BeanObject;
 use Mix\Helpers\ProcessHelper;
 
 /**
  * 服务器类
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class Server extends DIObject
+class Server extends BeanObject
 {
 
     // 主机
