@@ -6,11 +6,11 @@ use Mix\Core\Component\AbstractComponent;
 use Mix\Core\Component\ComponentInterface;
 
 /**
- * Class HandlerRegistry
+ * Class Registry
  * @package Mix\WebSocket
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class HandlerRegistry extends AbstractComponent
+class Registry extends AbstractComponent
 {
 
     /**
@@ -63,7 +63,7 @@ class HandlerRegistry extends AbstractComponent
 
     protected function getAction()
     {
-        return \Mix::$app->request->server('path_info', '');
+        return \Mix::$app->request->server('path_info', '/');
     }
 
     protected function getInterceptor()
@@ -73,7 +73,7 @@ class HandlerRegistry extends AbstractComponent
             return $this->_interceptors[$action];
         }
         $interceptorName = $this->rules[$action]['interceptor'] ?? null;
-        
+        var_dump($interceptorName);
     }
 
     protected function getHandler()

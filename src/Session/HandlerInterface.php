@@ -2,14 +2,12 @@
 
 namespace Mix\WebSocket\Session;
 
-use Mix\Core\Component\AbstractComponent;
-
 /**
- * Class ArrayHandler
+ * Interface HandlerInterface
  * @package Mix\WebSocket\Session
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class ArrayHandler extends AbstractComponent implements HandlerInterface
+interface HandlerInterface
 {
 
     /**
@@ -17,10 +15,7 @@ class ArrayHandler extends AbstractComponent implements HandlerInterface
      * @param null $key
      * @return mixed|null
      */
-    public function get($key = null)
-    {
-
-    }
+    public function get($key = null);
 
     /**
      * 设置
@@ -28,38 +23,26 @@ class ArrayHandler extends AbstractComponent implements HandlerInterface
      * @param $value
      * @return bool
      */
-    public function set($key, $value)
-    {
-
-    }
+    public function set($key, $value);
 
     /**
      * 删除
      * @param $key
      * @return bool
      */
-    public function delete($key)
-    {
-
-    }
+    public function delete($key);
 
     /**
      * 清除
      * @return bool
      */
-    public function clear()
-    {
-
-    }
+    public function clear();
 
     /**
      * 判断是否存在
      * @param $key
      * @return bool
      */
-    public function has($key)
-    {
-
-    }
+    public function has($key);
 
 }
