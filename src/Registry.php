@@ -2,8 +2,9 @@
 
 namespace Mix\WebSocket;
 
-use Mix\Core\Component\AbstractComponent;
 use Mix\Core\Component\ComponentInterface;
+use Mix\WebSocket\Registry\HandlerInterface;
+use Mix\WebSocket\Registry\InterceptorInterface;
 
 /**
  * Class Registry
@@ -49,33 +50,81 @@ class Registry extends AbstractComponent
      */
     protected $_interceptors = [];
 
-
+    /**
+     * 拦截
+     * @param $action
+     * @return void
+     */
     public function intercept()
     {
         $interceptor = $this->getInterceptor();
+        $interceptor->handshake();
     }
 
-    public function handle()
+    /**
+     * 处理消息
+     * @param $action
+     * @return void
+     */
+    public function handleMessage()
     {
         $handler = $this->getHandler();
-
+        $handler->message();
     }
 
+    /**
+     * 处理连接关闭
+     * @param $action
+     * @return void
+     */
+    public function handleConnectionClosed()
+    {
+        $handler = $this->getHandler();
+        $handler->connectionClosed();
+    }
+
+    /**
+     * 获取动作
+     * @return string
+     */
     protected function getAction()
     {
-        return \Mix::$app->request->server('path_info', '/');
+        $action = \Mix::$app->wsSession->get('action');
+        if ($action) {
+            return $action;
+        }
+        $action = \Mix::$app->request->server('path_info', '/');
+        \Mix::$app->wsSession->set('action', $action);
+        return $action;
     }
 
+    /**
+     * 获取拦截器
+     * @return InterceptorInterface
+     */
     protected function getInterceptor()
     {
         $action = $this->getAction();
         if (isset($this->_interceptors[$action])) {
             return $this->_interceptors[$action];
         }
-        $interceptorName = $this->rules[$action]['interceptor'] ?? null;
-        var_dump($interceptorName);
+        $interceptorName = $this->rules[$action]['interceptor'] ?? '';
+        $class           = "{$this->interceptorNamespace}\\{$interceptorName}";
+        if (!class_exists($class)) {
+            throw new \RuntimeException("'interceptor' not found: {$class}");
+        }
+        $interceptor = new $class;
+        if (!($interceptor instanceof InterceptorInterface)) {
+            throw new \RuntimeException("{$class} type is not 'Mix\WebSocket\Registry\InterceptorInterface'");
+        }
+        $this->_interceptors[$action] = $interceptor;
+        return $interceptor;
     }
 
+    /**
+     * 获取处理器
+     * @return HandlerInterface
+     */
     protected function getHandler()
     {
         $action = $this->getAction();
@@ -83,7 +132,16 @@ class Registry extends AbstractComponent
             return $this->_handlers[$action];
         }
         $handlerName = array_shift($this->rules[$action]);
-
+        $class       = "{$this->handlerNamespace}\\{$handlerName}";
+        if (!class_exists($class)) {
+            throw new \RuntimeException("'handler' not found: {$class}");
+        }
+        $handler = new $class;
+        if (!($handler instanceof HandlerInterface)) {
+            throw new \RuntimeException("{$class} type is not 'Mix\WebSocket\Registry\HandlerInterface'");
+        }
+        $this->_handlers[$action] = $handler;
+        return $handler;
     }
 
 }

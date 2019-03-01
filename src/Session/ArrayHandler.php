@@ -13,13 +13,39 @@ class ArrayHandler extends AbstractComponent implements HandlerInterface
 {
 
     /**
+     * 套接字描述符
+     * @var int
+     */
+    protected $_fd;
+
+    /**
+     * WebSocket会话数据
+     * @var array
+     */
+    protected $_session = [];
+
+    /**
+     * 设置套接字描述符
+     * @param $fd
+     * @return bool
+     */
+    public function setFildDescriptor($fd)
+    {
+        $this->_fd = $fd;
+        return true;
+    }
+
+    /**
      * 获取
      * @param null $key
-     * @return mixed|null
+     * @return mixed
      */
     public function get($key = null)
     {
-
+        if (is_null($key)) {
+            return $this->_session[$this->_fd] ?? [];
+        }
+        return $this->_session[$this->_fd][$key] ?? null;
     }
 
     /**
@@ -30,7 +56,8 @@ class ArrayHandler extends AbstractComponent implements HandlerInterface
      */
     public function set($key, $value)
     {
-
+        $this->_session[$this->_fd][$key] = $value;
+        return true;
     }
 
     /**
@@ -40,7 +67,8 @@ class ArrayHandler extends AbstractComponent implements HandlerInterface
      */
     public function delete($key)
     {
-
+        unset($this->_session[$this->_fd][$key]);
+        return true;
     }
 
     /**
@@ -49,7 +77,9 @@ class ArrayHandler extends AbstractComponent implements HandlerInterface
      */
     public function clear()
     {
-
+        $this->_session[$this->_fd] = [];
+        unset($this->_session[$this->_fd]);
+        return true;
     }
 
     /**
@@ -59,7 +89,7 @@ class ArrayHandler extends AbstractComponent implements HandlerInterface
      */
     public function has($key)
     {
-
+        return isset($this->_session[$this->_fd][$key]) ? true : false;
     }
 
 }

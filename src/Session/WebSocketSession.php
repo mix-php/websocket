@@ -26,13 +26,32 @@ class WebSocketSession extends AbstractComponent
     public $handler;
 
     /**
+     * 前置初始化
+     * @return void
+     */
+    public function beforeInitialize()
+    {
+        $fd = \Mix::$app->request->getFildDescriptor();
+        $this->handler->setFildDescriptor($fd);
+    }
+
+    /**
+     * 后置初始化
+     * @return void
+     */
+    public function afterInitialize()
+    {
+        $this->handler->clear();
+    }
+
+    /**
      * 获取
      * @param null $key
-     * @return mixed|null
+     * @return mixed
      */
     public function get($key = null)
     {
-        return $this->get($key);
+        return $this->handler->get($key);
     }
 
     /**
