@@ -89,12 +89,13 @@ class Registry extends AbstractComponent
      */
     protected function getAction()
     {
-        $action = \Mix::$app->wsSession->get('action');
+        $key    = 'registry:action';
+        $action = \Mix::$app->wsSession->get($key);
         if ($action) {
             return $action;
         }
         $action = \Mix::$app->request->server('path_info', '/');
-        \Mix::$app->wsSession->set('action', $action);
+        \Mix::$app->wsSession->set($key, $action);
         return $action;
     }
 

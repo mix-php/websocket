@@ -13,10 +13,9 @@ class ArrayHandler extends AbstractComponent implements HandlerInterface
 {
 
     /**
-     * 套接字描述符
-     * @var int
+     * @var \Mix\WebSocket\Session\WebSocketSession
      */
-    protected $_fd;
+    public $parent;
 
     /**
      * WebSocket会话数据
@@ -25,27 +24,18 @@ class ArrayHandler extends AbstractComponent implements HandlerInterface
     protected $_session = [];
 
     /**
-     * 设置套接字描述符
-     * @param $fd
-     * @return bool
-     */
-    public function setFildDescriptor($fd)
-    {
-        $this->_fd = $fd;
-        return true;
-    }
-
-    /**
      * 获取
      * @param null $key
      * @return mixed
      */
     public function get($key = null)
     {
+        $session = &$this->_session;
+        $fd      = $this->parent->fd;
         if (is_null($key)) {
-            return $this->_session[$this->_fd] ?? [];
+            return $session[$fd] ?? [];
         }
-        return $this->_session[$this->_fd][$key] ?? null;
+        return $session[$fd][$key] ?? null;
     }
 
     /**
@@ -56,7 +46,9 @@ class ArrayHandler extends AbstractComponent implements HandlerInterface
      */
     public function set($key, $value)
     {
-        $this->_session[$this->_fd][$key] = $value;
+        $session            = &$this->_session;
+        $fd                 = $this->parent->fd;
+        $session[$fd][$key] = $value;
         return true;
     }
 
@@ -67,7 +59,9 @@ class ArrayHandler extends AbstractComponent implements HandlerInterface
      */
     public function delete($key)
     {
-        unset($this->_session[$this->_fd][$key]);
+        $session = &$this->_session;
+        $fd      = $this->parent->fd;
+        unset($session[$fd][$key]);
         return true;
     }
 
@@ -77,8 +71,9 @@ class ArrayHandler extends AbstractComponent implements HandlerInterface
      */
     public function clear()
     {
-        $this->_session[$this->_fd] = [];
-        unset($this->_session[$this->_fd]);
+        $session = &$this->_session;
+        $fd      = $this->parent->fd;
+        unset($session[$fd]);
         return true;
     }
 
@@ -89,7 +84,9 @@ class ArrayHandler extends AbstractComponent implements HandlerInterface
      */
     public function has($key)
     {
-        return isset($this->_session[$this->_fd][$key]) ? true : false;
+        $session = &$this->_session;
+        $fd      = $this->parent->fd;
+        return isset($session[$fd][$key]) ? true : false;
     }
 
 }

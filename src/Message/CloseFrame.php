@@ -2,7 +2,11 @@
 
 namespace Mix\WebSocket\Message;
 
-class CloseFrame
+/**
+ * Class CloseFrame
+ * @package Mix\WebSocket\Message
+ *
+ */
+class CloseFrame extends \Swoole\WebSocket\CloseFrame
 {
-
 }

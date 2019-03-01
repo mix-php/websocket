@@ -11,13 +11,6 @@ interface HandlerInterface
 {
 
     /**
-     * 设置套接字描述符
-     * @param $fd
-     * @return bool
-     */
-    public function setFildDescriptor($fd);
-
-    /**
      * 获取
      * @param null $key
      * @return mixed

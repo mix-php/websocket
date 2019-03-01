@@ -2,7 +2,11 @@
 
 namespace Mix\WebSocket\Message;
 
-class Frame
+/**
+ * Class Frame
+ * @package Mix\WebSocket\Message
+ *
+ */
+class Frame extends \Swoole\WebSocket\Frame
 {
-
 }
