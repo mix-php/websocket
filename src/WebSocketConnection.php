@@ -36,7 +36,7 @@ class WebSocketConnection extends AbstractComponent
      */
     public function push($frame)
     {
-        return $this->server->push();
+        return $this->server->push($this->fd, $frame);
     }
 
     /**
