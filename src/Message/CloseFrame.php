@@ -10,9 +10,17 @@ use Mix\Core\Bean\ObjectInterface;
  * @package Mix\WebSocket\Message
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class CloseFrame extends \Swoole\WebSocket\CloseFrame implements ObjectInterface
+class CloseFrame extends Frame
 {
 
-    use ObjectTrait;
+    /**
+     * @var int
+     */
+    public $code;
+
+    /**
+     * @var string
+     */
+    public $reason;
 
 }

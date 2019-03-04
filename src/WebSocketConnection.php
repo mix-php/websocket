@@ -26,15 +26,15 @@ class WebSocketConnection extends AbstractComponent
     public function beforeInitialize(\Swoole\WebSocket\Server $server, int $fd)
     {
         $this->server = $server;
-        $this->fd     = $fd;
+        $this->fd = $fd;
     }
 
     /**
      * 发送
-     * @param \Mix\WebSocket\Message\Frame|\Mix\WebSocket\Message\CloseFrame $frame
+     * @param \Swoole\WebSocket\Frame $frame
      * @return bool
      */
-    public function push($frame)
+    public function push(\Swoole\WebSocket\Frame $frame)
     {
         return $this->server->push($this->fd, $frame);
     }

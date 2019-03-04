@@ -10,9 +10,29 @@ use Mix\Core\Bean\ObjectInterface;
  * @package Mix\WebSocket\Message
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class Frame extends \Swoole\WebSocket\Frame implements ObjectInterface
+class Frame implements ObjectInterface
 {
 
     use ObjectTrait;
+
+    /**
+     * @var int
+     */
+    public $fd;
+
+    /**
+     * @var bool
+     */
+    public $finish;
+
+    /**
+     * @var string
+     */
+    public $opcode;
+
+    /**
+     * @var string
+     */
+    public $data;
 
 }
