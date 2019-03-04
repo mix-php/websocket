@@ -3,6 +3,7 @@
 namespace Mix\WebSocket;
 
 use Mix\Core\Component\ComponentInterface;
+use Mix\Core\Component\AbstractComponent;
 use Mix\WebSocket\Registry\HandlerInterface;
 use Mix\WebSocket\Registry\InterceptorInterface;
 
@@ -62,14 +63,25 @@ class Registry extends AbstractComponent
     }
 
     /**
+     * 处理连接开启
+     * @param $action
+     * @return void
+     */
+    public function handleOpen()
+    {
+        $handler = $this->getHandler();
+        $handler->open();
+    }
+
+    /**
      * 处理消息
      * @param $action
      * @return void
      */
-    public function handleMessage()
+    public function handleMessage(\Swoole\WebSocket\Frame $frame)
     {
         $handler = $this->getHandler();
-        $handler->message();
+        $handler->message($frame);
     }
 
     /**
@@ -77,10 +89,10 @@ class Registry extends AbstractComponent
      * @param $action
      * @return void
      */
-    public function handleConnectionClosed()
+    public function handleClose()
     {
         $handler = $this->getHandler();
-        $handler->connectionClosed();
+        $handler->close();
     }
 
     /**
@@ -132,7 +144,8 @@ class Registry extends AbstractComponent
         if (isset($this->_handlers[$action])) {
             return $this->_handlers[$action];
         }
-        $handlerName = array_shift($this->rules[$action]);
+        $rule        = $this->rules[$action] ?? [];
+        $handlerName = array_shift($rule);
         $class       = "{$this->handlerNamespace}\\{$handlerName}";
         if (!class_exists($class)) {
             throw new \RuntimeException("'handler' not found: {$class}");

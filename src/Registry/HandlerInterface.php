@@ -14,12 +14,18 @@ interface HandlerInterface
      * 处理消息
      * @return void
      */
-    public function message();
+    public function open();
+
+    /**
+     * 处理消息
+     * @return void
+     */
+    public function message(\Swoole\WebSocket\Frame $frame);
 
     /**
      * 连接关闭
      * @return void
      */
-    public function connectionClosed();
+    public function close();
 
 }
