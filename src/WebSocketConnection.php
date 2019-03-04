@@ -38,13 +38,13 @@ class WebSocketConnection extends AbstractComponent
     {
         return $this->server->push($this->fd, $frame);
     }
-
+    
     /**
      * 关闭连接
-     * @param $code
-     * @param $reason
+     * @param int $code
+     * @param string $reason
      */
-    public function disconnect($code, $reason)
+    public function disconnect($code = 1000, $reason = '')
     {
         $this->server->disconnect($this->fd, $code, $reason);
     }
