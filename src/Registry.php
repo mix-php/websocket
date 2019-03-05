@@ -56,10 +56,10 @@ class Registry extends AbstractComponent
      * @param $action
      * @return void
      */
-    public function intercept()
+    public function intercept($request, $response)
     {
         $interceptor = $this->getInterceptor();
-        $interceptor->handshake();
+        $interceptor->handshake($request, $response);
     }
 
     /**
@@ -67,10 +67,10 @@ class Registry extends AbstractComponent
      * @param $action
      * @return void
      */
-    public function handleOpen()
+    public function handleOpen($request)
     {
         $handler = $this->getHandler();
-        $handler->open();
+        $handler->open($request);
     }
 
     /**
@@ -101,7 +101,7 @@ class Registry extends AbstractComponent
      */
     protected function getAction()
     {
-        $key = 'registry:action';
+        $key    = 'registry:action';
         $action = \Mix::$app->wsSession->get($key);
         if ($action) {
             return $action;
@@ -122,7 +122,7 @@ class Registry extends AbstractComponent
             return $this->_interceptors[$action];
         }
         $interceptorName = $this->rules[$action]['interceptor'] ?? '';
-        $class = "{$this->interceptorNamespace}\\{$interceptorName}";
+        $class           = "{$this->interceptorNamespace}\\{$interceptorName}";
         if (!class_exists($class)) {
             throw new \RuntimeException("'interceptor' not found: {$class}");
         }
@@ -144,9 +144,9 @@ class Registry extends AbstractComponent
         if (isset($this->_handlers[$action])) {
             return $this->_handlers[$action];
         }
-        $rule = $this->rules[$action] ?? [];
+        $rule        = $this->rules[$action] ?? [];
         $handlerName = array_shift($rule);
-        $class = "{$this->handlerNamespace}\\{$handlerName}";
+        $class       = "{$this->handlerNamespace}\\{$handlerName}";
         if (!class_exists($class)) {
             throw new \RuntimeException("'handler' not found: {$class}");
         }

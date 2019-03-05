@@ -2,6 +2,9 @@
 
 namespace Mix\WebSocket\Registry;
 
+use Mix\Http\Message\Request;
+use Mix\WebSocket\Frame;
+
 /**
  * Interface HandlerInterface
  * @package Mix\WebSocket\Registry
@@ -11,16 +14,18 @@ interface HandlerInterface
 {
 
     /**
-     * 处理消息
+     * 开启连接
+     * @param Request $request
      * @return void
      */
-    public function open();
+    public function open(Request $request);
 
     /**
      * 处理消息
+     * @param Frame $frame
      * @return void
      */
-    public function message(\Swoole\WebSocket\Frame $frame);
+    public function message(Frame $frame);
 
     /**
      * 连接关闭
