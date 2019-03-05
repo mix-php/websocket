@@ -32,13 +32,6 @@ class Error extends AbstractComponent
      */
     public function handleException($e)
     {
-        // 握手错误
-        if (\Mix::$app->has('response') && \Mix::$app->response->getStatus() == ComponentInterface::STATUS_RUNNING) {
-            \Mix::$app->response->statusCode = 500;
-            \Mix::$app->response->send();
-            return;
-        }
-        // 其他错误
         
     }
 

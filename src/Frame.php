@@ -53,12 +53,22 @@ class Frame extends AbstractComponent
         $this->_frame = $frame;
         // 执行初始化
         $this->opcode = $frame->opcode;
-        $this->data   = $frame->data;
+        $this->data = $frame->data;
         $this->finish = $frame->finish;
         if ($this->isCloseFrame()) {
-            $this->code   = $frame->code;
+            $this->code = $frame->code;
             $this->reason = $frame->reason;
         }
+        // 设置组件状态
+        $this->setStatus(ComponentInterface::STATUS_RUNNING);
+    }
+
+    /**
+     * 前置处理事件
+     */
+    public function onBeforeInitialize()
+    {
+        // 移除设置组件状态
     }
 
     /**

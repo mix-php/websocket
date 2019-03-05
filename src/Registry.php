@@ -69,6 +69,16 @@ class Registry extends AbstractComponent
     public function beforeInitialize(int $fd)
     {
         $this->_fd = $fd;
+        // 设置组件状态
+        $this->setStatus(ComponentInterface::STATUS_RUNNING);
+    }
+
+    /**
+     * 前置处理事件
+     */
+    public function onBeforeInitialize()
+    {
+        // 移除设置组件状态
     }
 
     /**
@@ -115,14 +125,14 @@ class Registry extends AbstractComponent
     }
 
     /**
-     * 获取动作
+     * 获取规则
      * @return array
      */
     protected function getRule()
     {
         $connections = &$this->_connections;
-        $rules       = &$this->rules;
-        $fd          = $this->_fd;
+        $rules = &$this->rules;
+        $fd = $this->_fd;
         if (isset($connections[$fd])) {
             return $connections[$fd];
         }
@@ -139,21 +149,21 @@ class Registry extends AbstractComponent
      */
     protected function getInterceptor()
     {
-        $action = $this->getAction();
-        if (isset($this->_interceptors[$action])) {
-            return $this->_interceptors[$action];
+        $interceptors = &$this->_interceptors;
+        $rule = $this->getRule();
+        $interceptorName = $rule['interceptor'] ?? '';
+        $interceptorClass = "{$this->interceptorNamespace}\\{$interceptorName}";
+        if (isset($interceptors[$interceptorClass])) {
+            return $interceptors[$interceptorClass];
         }
-        $interceptorName = $this->rules[$action]['interceptor'] ?? '';
-        $class           = "{$this->interceptorNamespace}\\{$interceptorName}";
-        if (!class_exists($class)) {
-            throw new \RuntimeException("'interceptor' not found: {$class}");
+        if (!class_exists($interceptorClass)) {
+            throw new \RuntimeException("'interceptor' not found: {$interceptorClass}");
         }
-        $interceptor = new $class;
+        $interceptor = new $interceptorClass;
         if (!($interceptor instanceof InterceptorInterface)) {
-            throw new \RuntimeException("{$class} type is not 'Mix\WebSocket\Registry\InterceptorInterface'");
+            throw new \RuntimeException("{$interceptorClass} type is not 'Mix\WebSocket\Registry\InterceptorInterface'");
         }
-        $this->_interceptors[$action] = $interceptor;
-        return $interceptor;
+        return $interceptors[$interceptorClass] = $interceptor;
     }
 
     /**
@@ -162,22 +172,22 @@ class Registry extends AbstractComponent
      */
     protected function getHandler()
     {
-        $action = $this->getAction();
-        if (isset($this->_handlers[$action])) {
-            return $this->_handlers[$action];
+        $handlers = &$this->_handlers;
+        $rule = $this->getRule();
+        $tmp = $rule;
+        $handlerName = array_shift($tmp);
+        $handlerClass = "{$this->handlerNamespace}\\{$handlerName}";
+        if (isset($handlers[$handlerClass])) {
+            return $handlers[$handlerClass];
         }
-        $rule        = $this->rules[$action] ?? [];
-        $handlerName = array_shift($rule);
-        $class       = "{$this->handlerNamespace}\\{$handlerName}";
-        if (!class_exists($class)) {
-            throw new \RuntimeException("'handler' not found: {$class}");
+        if (!class_exists($handlerClass)) {
+            throw new \RuntimeException("'handler' not found: {$handlerClass}");
         }
-        $handler = new $class;
+        $handler = new $handlerClass;
         if (!($handler instanceof HandlerInterface)) {
-            throw new \RuntimeException("{$class} type is not 'Mix\WebSocket\Registry\HandlerInterface'");
+            throw new \RuntimeException("{$handlerClass} type is not 'Mix\WebSocket\Registry\HandlerInterface'");
         }
-        $this->_handlers[$action] = $handler;
-        return $handler;
+        return $handlers[$handlerClass] = $handler;
     }
 
 }

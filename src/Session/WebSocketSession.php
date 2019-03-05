@@ -33,20 +33,19 @@ class WebSocketSession extends AbstractComponent
 
     /**
      * 前置初始化
-     * @return void
      */
-    public function beforeInitialize($fd)
+    public function onBeforeInitialize()
     {
-        $this->fd = $fd;
-    }
-
-    /**
-     * 后置初始化
-     * @return void
-     */
-    public function afterInitialize()
-    {
-        $this->handler->clear();
+        parent::onBeforeInitialize();
+        // 设置fd
+        if (\Mix::$app->isRunning('ws')) {
+            $this->fd = \Mix::$app->ws->fd;
+            return;
+        }
+        if (\Mix::$app->isRunning('request')) {
+            $this->fd = \Mix::$app->request->fd;
+            return;
+        }
     }
 
     /**

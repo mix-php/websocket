@@ -27,6 +27,16 @@ class WebSocketConnection extends AbstractComponent
     {
         $this->server = $server;
         $this->fd = $fd;
+        // 设置组件状态
+        $this->setStatus(ComponentInterface::STATUS_RUNNING);
+    }
+
+    /**
+     * 前置处理事件
+     */
+    public function onBeforeInitialize()
+    {
+        // 移除设置组件状态
     }
 
     /**
@@ -38,7 +48,7 @@ class WebSocketConnection extends AbstractComponent
     {
         return $this->server->push($this->fd, $frame);
     }
-    
+
     /**
      * 关闭连接
      * @param int $code
