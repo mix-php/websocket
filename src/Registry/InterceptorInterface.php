@@ -16,8 +16,6 @@ interface InterceptorInterface
     /**
      * 握手
      * @param Request $request
-     * @param Response $response
-     * @return void
      */
     public function handshake(Request $request, Response $response);
 

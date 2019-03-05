@@ -52,56 +52,74 @@ class Registry extends AbstractComponent
     protected $_interceptors = [];
 
     /**
-     * 拦截
-     * @param $action
-     * @return void
+     * 连接信息
+     * @var array
      */
-    public function intercept($request, $response)
+    protected $_connections = [];
+
+    /**
+     * 文件描述符
+     * @var int
+     */
+    protected $_fd;
+
+    /**
+     * 前置初始化
+     */
+    public function beforeInitialize(int $fd)
+    {
+        $this->_fd = $fd;
+    }
+
+    /**
+     * 握手处理
+     * @param $request
+     * @param $response
+     */
+    public function handleHandshake($request, $response)
     {
         $interceptor = $this->getInterceptor();
         $interceptor->handshake($request, $response);
     }
 
     /**
-     * 处理连接开启
-     * @param $action
-     * @return void
+     * 连接开启处理
+     * @param $ws
+     * @param $request
      */
-    public function handleOpen($request)
+    public function handleOpen($ws, $request)
     {
         $handler = $this->getHandler();
-        $handler->open($request);
+        $handler->open($ws, $request);
     }
 
     /**
-     * 处理消息
-     * @param $action
-     * @return void
+     * 消息处理
+     * @param $ws
+     * @param $frame
      */
-    public function handleMessage($frame)
+    public function handleMessage($ws, $frame)
     {
         $handler = $this->getHandler();
-        $handler->message($frame);
+        $handler->message($ws, $frame);
     }
 
     /**
-     * 处理连接关闭
-     * @param $action
-     * @return void
+     * 连接关闭处理
+     * @param $ws
      */
-    public function handleClose()
+    public function handleClose($ws)
     {
         $handler = $this->getHandler();
-        $handler->close();
+        $handler->close($ws);
     }
 
     /**
      * 获取动作
      * @return string
      */
-    protected function getAction()
+    protected function match()
     {
-        $key    = 'registry:action';
         $action = \Mix::$app->wsSession->get($key);
         if ($action) {
             return $action;

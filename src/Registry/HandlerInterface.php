@@ -4,6 +4,7 @@ namespace Mix\WebSocket\Registry;
 
 use Mix\Http\Message\Request;
 use Mix\WebSocket\Frame;
+use Mix\WebSocket\WebSocketConnection;
 
 /**
  * Interface HandlerInterface
@@ -15,22 +16,22 @@ interface HandlerInterface
 
     /**
      * 开启连接
+     * @param WebSocketConnection $ws
      * @param Request $request
-     * @return void
      */
-    public function open(Request $request);
+    public function open(WebSocketConnection $ws, Request $request);
 
     /**
      * 处理消息
+     * @param WebSocketConnection $ws
      * @param Frame $frame
-     * @return void
      */
-    public function message(Frame $frame);
+    public function message(WebSocketConnection $ws, Frame $frame);
 
     /**
      * 连接关闭
-     * @return void
+     * @param WebSocketConnection $ws
      */
-    public function close();
+    public function close(WebSocketConnection $ws);
 
 }
