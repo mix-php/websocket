@@ -116,17 +116,21 @@ class Registry extends AbstractComponent
 
     /**
      * 获取动作
-     * @return string
+     * @return array
      */
-    protected function match()
+    protected function getRule()
     {
-        $action = \Mix::$app->wsSession->get($key);
-        if ($action) {
-            return $action;
+        $connections = &$this->_connections;
+        $rules       = &$this->rules;
+        $fd          = $this->_fd;
+        if (isset($connections[$fd])) {
+            return $connections[$fd];
         }
         $action = \Mix::$app->request->server('path_info', '/');
-        \Mix::$app->wsSession->set($key, $action);
-        return $action;
+        if (!isset($rules[$action])) {
+            throw new \Mix\Exception\NotFoundException("'{$action}' No registration Handler.");
+        }
+        return $connections[$fd] = $rules[$action];
     }
 
     /**
