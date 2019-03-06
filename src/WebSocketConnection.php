@@ -3,6 +3,7 @@
 namespace Mix\WebSocket;
 
 use Mix\Core\Component\AbstractComponent;
+use Mix\Core\Component\ComponentInterface;
 
 class WebSocketConnection extends AbstractComponent
 {
