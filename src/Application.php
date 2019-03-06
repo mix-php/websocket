@@ -2,8 +2,7 @@
 
 namespace Mix\WebSocket;
 
-use Mix\Http\Application\ComponentInitializeTrait;
-use Mix\Http\Application\DebugTrait;
+use Mix\Core\Application\ComponentInitializeTrait;
 
 /**
  * Class Application
@@ -14,6 +13,5 @@ class Application extends \Mix\Core\Application
 {
 
     use ComponentInitializeTrait;
-    use DebugTrait;
 
 }

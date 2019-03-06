@@ -32,7 +32,11 @@ class Error extends AbstractComponent
      */
     public function handleException($e)
     {
-        
+        throw $e;
+        // 关闭连接
+        if (\Mix::$app->isRunning('ws')) {
+            \Mix::$app->ws->disconnect();
+        }
     }
 
 }
