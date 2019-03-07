@@ -42,7 +42,7 @@ class Error extends AbstractComponent
             'file'    => $e->getFile(),
             'line'    => $e->getLine(),
             'type'    => get_class($e),
-            'trace'   => explode("\n", $e->getTraceAsString()),
+            'trace'   => $e->getTraceAsString(),
         ];
         // 日志处理
         if (!($e instanceof \Mix\Exception\NotFoundException)) {
@@ -113,7 +113,8 @@ class Error extends AbstractComponent
                 ];
             }
         }
-        $frame = new TextFrame([
+        $errors['trace'] = explode("\n", $errors['trace']);
+        $frame           = new TextFrame([
             'data' => JsonHelper::encode($errors),
         ]);
         \Mix::$app->ws->push($frame);
