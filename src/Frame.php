@@ -54,10 +54,10 @@ class Frame extends AbstractComponent
         $this->_frame = $frame;
         // 执行初始化
         $this->opcode = $frame->opcode;
-        $this->data = $frame->data;
+        $this->data   = $frame->data;
         $this->finish = $frame->finish;
         if ($this->isCloseFrame()) {
-            $this->code = $frame->code;
+            $this->code   = $frame->code;
             $this->reason = $frame->reason;
         }
         // 设置组件状态
@@ -106,6 +106,15 @@ class Frame extends AbstractComponent
     public function isCloseFrame()
     {
         return $this->_frame instanceof \Swoole\WebSocket\CloseFrame ? true : false;
+    }
+
+    /**
+     * 获取原始帧
+     * @return \Swoole\WebSocket\Frame
+     */
+    public function getRawFrame()
+    {
+        return $this->_frame;
     }
 
 }
