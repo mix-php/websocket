@@ -98,12 +98,13 @@ class Error extends AbstractComponent
         if (!\Mix::$app->isRunning('ws')) {
             return;
         }
-        $statusCode = $errors['status'];
+        $errors['trace'] = explode("\n", $errors['trace']);
+        $statusCode      = $errors['status'];
         if (!\Mix::$app->appDebug) {
             if ($statusCode == 404) {
                 $errors = [
                     'status'  => 404,
-                    'message' => $e->getMessage(),
+                    'message' => $errors['message'],
                 ];
             }
             if ($statusCode == 500) {
@@ -113,8 +114,7 @@ class Error extends AbstractComponent
                 ];
             }
         }
-        $errors['trace'] = explode("\n", $errors['trace']);
-        $frame           = new TextFrame([
+        $frame = new TextFrame([
             'data' => JsonHelper::encode($errors),
         ]);
         \Mix::$app->ws->push($frame);
