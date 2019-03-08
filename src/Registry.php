@@ -82,76 +82,14 @@ class Registry extends AbstractComponent
     }
 
     /**
-     * 握手处理
-     * @param $request
-     * @param $response
-     */
-    public function handleHandshake($request, $response)
-    {
-        $interceptor = $this->getInterceptor();
-        $interceptor->handshake($request, $response);
-    }
-
-    /**
-     * 连接开启处理
-     * @param $ws
-     * @param $request
-     */
-    public function handleOpen($ws, $request)
-    {
-        $handler = $this->getHandler();
-        $handler->open($ws, $request);
-    }
-
-    /**
-     * 消息处理
-     * @param $ws
-     * @param $frame
-     */
-    public function handleMessage($ws, $frame)
-    {
-        $handler = $this->getHandler();
-        $handler->message($ws, $frame);
-    }
-
-    /**
-     * 连接关闭处理
-     * @param $ws
-     */
-    public function handleClose($ws)
-    {
-        $handler = $this->getHandler();
-        $handler->close($ws);
-    }
-
-    /**
-     * 获取规则
-     * @return array
-     */
-    protected function getRule()
-    {
-        $connections = &$this->_connections;
-        $rules = &$this->rules;
-        $fd = $this->_fd;
-        if (isset($connections[$fd])) {
-            return $connections[$fd];
-        }
-        $action = \Mix::$app->request->server('path_info', '/');
-        if (!isset($rules[$action])) {
-            throw new \Mix\Exception\NotFoundException("'{$action}' No registration Handler.");
-        }
-        return $connections[$fd] = $rules[$action];
-    }
-
-    /**
      * 获取拦截器
      * @return InterceptorInterface
      */
-    protected function getInterceptor()
+    public function getInterceptor()
     {
-        $interceptors = &$this->_interceptors;
-        $rule = $this->getRule();
-        $interceptorName = $rule['interceptor'] ?? '';
+        $interceptors     = &$this->_interceptors;
+        $rule             = $this->getRule();
+        $interceptorName  = $rule['interceptor'] ?? '';
         $interceptorClass = "{$this->interceptorNamespace}\\{$interceptorName}";
         if (isset($interceptors[$interceptorClass])) {
             return $interceptors[$interceptorClass];
@@ -170,12 +108,12 @@ class Registry extends AbstractComponent
      * 获取处理器
      * @return HandlerInterface
      */
-    protected function getHandler()
+    public function getHandler()
     {
-        $handlers = &$this->_handlers;
-        $rule = $this->getRule();
-        $tmp = $rule;
-        $handlerName = array_shift($tmp);
+        $handlers     = &$this->_handlers;
+        $rule         = $this->getRule();
+        $tmp          = $rule;
+        $handlerName  = array_shift($tmp);
         $handlerClass = "{$this->handlerNamespace}\\{$handlerName}";
         if (isset($handlers[$handlerClass])) {
             return $handlers[$handlerClass];
@@ -188,6 +126,25 @@ class Registry extends AbstractComponent
             throw new \RuntimeException("{$handlerClass} type is not 'Mix\WebSocket\Registry\HandlerInterface'");
         }
         return $handlers[$handlerClass] = $handler;
+    }
+
+    /**
+     * 获取规则
+     * @return array
+     */
+    protected function getRule()
+    {
+        $connections = &$this->_connections;
+        $rules       = &$this->rules;
+        $fd          = $this->_fd;
+        if (isset($connections[$fd])) {
+            return $connections[$fd];
+        }
+        $action = \Mix::$app->request->server('path_info', '/');
+        if (!isset($rules[$action])) {
+            throw new \Mix\Exception\NotFoundException("'{$action}' No registration Handler.");
+        }
+        return $connections[$fd] = $rules[$action];
     }
 
 }
