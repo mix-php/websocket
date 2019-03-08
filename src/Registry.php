@@ -82,6 +82,14 @@ class Registry extends AbstractComponent
     }
 
     /**
+     * 前置初始化
+     */
+    public function afterInitialize()
+    {
+        unset($this->_connections[$this->_fd]);
+    }
+
+    /**
      * 获取拦截器
      * @return InterceptorInterface
      */
