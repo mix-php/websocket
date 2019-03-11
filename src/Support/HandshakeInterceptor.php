@@ -1,13 +1,13 @@
 <?php
 
-namespace Mix\WebSocket\Registry\Support;
+namespace Mix\WebSocket\Support;
 
 use Mix\Http\Message\Request;
 use Mix\Http\Message\Response;
 
 /**
  * Class HandshakeInterceptor
- * @package Mix\WebSocket\Registry\Support
+ * @package Mix\WebSocket\Support
  * @author LIUJIAN <coder.keda@gmail.com>
  */
 class HandshakeInterceptor

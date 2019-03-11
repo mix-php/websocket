@@ -5,6 +5,11 @@ namespace Mix\WebSocket;
 use Mix\Core\Component\AbstractComponent;
 use Mix\Core\Component\ComponentInterface;
 
+/**
+ * Class WebSocketConnection
+ * @package Mix\WebSocket
+ * @author LIUJIAN <coder.keda@gmail.com>
+ */
 class WebSocketConnection extends AbstractComponent
 {
 

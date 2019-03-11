@@ -1,6 +1,6 @@
 <?php
 
-namespace Mix\WebSocket\Registry;
+namespace Mix\WebSocket\Handler;
 
 use Mix\Http\Message\Request;
 use Mix\WebSocket\Frame;
@@ -8,7 +8,7 @@ use Mix\WebSocket\WebSocketConnection;
 
 /**
  * Interface HandlerInterface
- * @package Mix\WebSocket\Registry
+ * @package Mix\WebSocket\Handler
  * @author LIUJIAN <coder.keda@gmail.com>
  */
 interface HandlerInterface
