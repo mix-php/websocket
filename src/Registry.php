@@ -4,8 +4,8 @@ namespace Mix\WebSocket;
 
 use Mix\Core\Component\ComponentInterface;
 use Mix\Core\Component\AbstractComponent;
-use Mix\WebSocket\Registry\HandlerInterface;
-use Mix\WebSocket\Registry\InterceptorInterface;
+use Mix\WebSocket\Handler\HandlerInterface;
+use Mix\WebSocket\Interceptor\InterceptorInterface;
 
 /**
  * Class Registry
@@ -107,7 +107,7 @@ class Registry extends AbstractComponent
         }
         $interceptor = new $interceptorClass;
         if (!($interceptor instanceof InterceptorInterface)) {
-            throw new \RuntimeException("{$interceptorClass} type is not 'Mix\WebSocket\Registry\InterceptorInterface'");
+            throw new \RuntimeException("{$interceptorClass} type is not 'Mix\WebSocket\Interceptor\InterceptorInterface'");
         }
         return $interceptors[$interceptorClass] = $interceptor;
     }
@@ -131,7 +131,7 @@ class Registry extends AbstractComponent
         }
         $handler = new $handlerClass;
         if (!($handler instanceof HandlerInterface)) {
-            throw new \RuntimeException("{$handlerClass} type is not 'Mix\WebSocket\Registry\HandlerInterface'");
+            throw new \RuntimeException("{$handlerClass} type is not 'Mix\WebSocket\Handler\HandlerInterface'");
         }
         return $handlers[$handlerClass] = $handler;
     }
