@@ -69,20 +69,10 @@ class Registry extends AbstractComponent
     public function beforeInitialize(int $fd)
     {
         $this->_fd = $fd;
-        // 设置组件状态
-        $this->setStatus(ComponentInterface::STATUS_RUNNING);
     }
 
     /**
-     * 前置处理事件
-     */
-    public function onBeforeInitialize()
-    {
-        // 移除设置组件状态
-    }
-
-    /**
-     * 前置初始化
+     * 后置初始化
      */
     public function afterInitialize()
     {
