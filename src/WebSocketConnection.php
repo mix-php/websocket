@@ -32,7 +32,7 @@ class WebSocketConnection extends AbstractComponent
     public function beforeInitialize(\Swoole\Server $server, int $fd)
     {
         $this->server = $server;
-        $this->fd = $fd;
+        $this->fd     = $fd;
         // 设置组件状态
         $this->setStatus(ComponentInterface::STATUS_RUNNING);
     }
@@ -53,6 +53,15 @@ class WebSocketConnection extends AbstractComponent
     public function push(\Swoole\WebSocket\Frame $frame)
     {
         return $this->server->push($this->fd, $frame);
+    }
+
+    /**
+     * 获取客户端信息
+     * @return array|bool
+     */
+    public function getClientInfo()
+    {
+        return $this->server->getClientInfo($this->fd);
     }
 
     /**
