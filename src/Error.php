@@ -35,7 +35,7 @@ class Error extends AbstractComponent
     {
         // 错误参数定义
         $statusCode = $e instanceof \Mix\Exception\NotFoundException ? 404 : 500;
-        $errors     = [
+        $errors = [
             'status'  => $statusCode,
             'code'    => $e->getCode(),
             'message' => $e->getMessage(),
@@ -64,15 +64,15 @@ class Error extends AbstractComponent
         $message = "{$errors['message']}" . PHP_EOL;
         $message .= "[type] {$errors['type']} [code] {$errors['code']}" . PHP_EOL;
         $message .= "[file] {$errors['file']} [line] {$errors['line']}" . PHP_EOL;
-        $message .= "[trace] {$errors['trace']}" . PHP_EOL;
+        $message .= "[trace] {$errors['trace']}";
         if (\Mix::$app->isRunning('request')) {
-            $message .= '$SERVER' . substr(print_r(\Mix::$app->request->server(), true), 5);
+            $message .= PHP_EOL . '$SERVER' . substr(print_r(\Mix::$app->request->server(), true), 5);
             $message .= '$HEADER' . substr(print_r(\Mix::$app->request->header(), true), 5);
             $message .= '$GET' . substr(print_r(\Mix::$app->request->get(), true), 5);
             $message .= '$POST' . substr(print_r(\Mix::$app->request->post(), true), 5, -1);
         }
         if (\Mix::$app->isRunning('frame')) {
-            $message .= '$FRAME' . substr(print_r((array)\Mix::$app->frame->getRawFrame(), true), 5);
+            $message .= PHP_EOL . '$FRAME' . substr(print_r((array)\Mix::$app->frame->getRawFrame(), true), 5);
         }
         // 写入
         $errorType = \Mix\Core\Error::getType($errors['code']);
@@ -99,7 +99,7 @@ class Error extends AbstractComponent
             return;
         }
         $errors['trace'] = explode("\n", $errors['trace']);
-        $statusCode      = $errors['status'];
+        $statusCode = $errors['status'];
         if (!\Mix::$app->appDebug) {
             if ($statusCode == 404) {
                 $errors = [
