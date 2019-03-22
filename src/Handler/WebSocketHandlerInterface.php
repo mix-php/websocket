@@ -7,11 +7,11 @@ use Mix\WebSocket\Frame;
 use Mix\WebSocket\WebSocketConnection;
 
 /**
- * Interface HandlerInterface
+ * Interface WebSocketHandlerInterface
  * @package Mix\WebSocket\Handler
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-interface HandlerInterface
+interface WebSocketHandlerInterface
 {
 
     /**
