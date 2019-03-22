@@ -7,7 +7,7 @@ namespace Mix\WebSocket;
  * @package Mix\WebSocket
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class Frame extends AbstractComponent
+class Frame
 {
 
     /**
