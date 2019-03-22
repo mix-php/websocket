@@ -2,9 +2,6 @@
 
 namespace Mix\WebSocket;
 
-use Mix\Core\Component\AbstractComponent;
-use Mix\Core\Component\ComponentInterface;
-
 /**
  * Class Frame
  * @package Mix\WebSocket
@@ -45,10 +42,10 @@ class Frame extends AbstractComponent
     protected $_frame;
 
     /**
-     * 针对每个请求执行初始化
-     * @param \Swoole\Http\Request $request
+     * Frame constructor.
+     * @param \Swoole\WebSocket\Frame $frame
      */
-    public function beforeInitialize(\Swoole\WebSocket\Frame $frame)
+    public function __construct(\Swoole\WebSocket\Frame $frame)
     {
         // 设置帧
         $this->_frame = $frame;
@@ -60,8 +57,6 @@ class Frame extends AbstractComponent
             $this->code   = $frame->code;
             $this->reason = $frame->reason;
         }
-        // 设置组件状态
-        $this->setStatus(ComponentInterface::STATUS_RUNNING);
     }
 
     /**
