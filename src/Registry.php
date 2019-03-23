@@ -138,7 +138,10 @@ class Registry extends AbstractComponent
         if (isset($connections[$fd])) {
             return $connections[$fd];
         }
-        $action = \Mix::$app->request->server('path_info', '/');
+        $action = '';
+        if (\Mix::$app->isRunning('request')) {
+            $action = \Mix::$app->request->server('path_info', '/');
+        }
         if (!isset($rules[$action])) {
             throw new \Mix\Exception\NotFoundException("'{$action}' No registration Handler.");
         }
