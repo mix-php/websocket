@@ -4,8 +4,8 @@ namespace Mix\WebSocket;
 
 use Mix\Core\Component\ComponentInterface;
 use Mix\Core\Component\AbstractComponent;
-use Mix\WebSocket\Handler\HandlerInterface;
-use Mix\WebSocket\Interceptor\InterceptorInterface;
+use Mix\WebSocket\Handler\WebSocketHandlerInterface;
+use Mix\WebSocket\Interceptor\WebSocketInterceptorInterface;
 
 /**
  * Class Registry
@@ -81,7 +81,7 @@ class Registry extends AbstractComponent
 
     /**
      * 获取拦截器
-     * @return InterceptorInterface
+     * @return WebSocketInterceptorInterface
      */
     public function getInterceptor()
     {
@@ -96,15 +96,15 @@ class Registry extends AbstractComponent
             throw new \RuntimeException("'interceptor' not found: {$interceptorClass}");
         }
         $interceptor = new $interceptorClass;
-        if (!($interceptor instanceof InterceptorInterface)) {
-            throw new \RuntimeException("{$interceptorClass} type is not 'Mix\WebSocket\Interceptor\InterceptorInterface'");
+        if (!($interceptor instanceof WebSocketInterceptorInterface)) {
+            throw new \RuntimeException("{$interceptorClass} type is not 'Mix\WebSocket\Interceptor\WebSocketInterceptorInterface'");
         }
         return $interceptors[$interceptorClass] = $interceptor;
     }
 
     /**
      * 获取处理器
-     * @return HandlerInterface
+     * @return WebSocketHandlerInterface
      */
     public function getHandler()
     {
@@ -120,8 +120,8 @@ class Registry extends AbstractComponent
             throw new \RuntimeException("'handler' not found: {$handlerClass}");
         }
         $handler = new $handlerClass;
-        if (!($handler instanceof HandlerInterface)) {
-            throw new \RuntimeException("{$handlerClass} type is not 'Mix\WebSocket\Handler\HandlerInterface'");
+        if (!($handler instanceof WebSocketHandlerInterface)) {
+            throw new \RuntimeException("{$handlerClass} type is not 'Mix\WebSocket\Handler\WebSocketHandlerInterface'");
         }
         return $handlers[$handlerClass] = $handler;
     }

@@ -6,11 +6,11 @@ use Mix\Http\Message\Request;
 use Mix\Http\Message\Response;
 
 /**
- * Interface InterceptorInterface
+ * Interface WebSocketInterceptorInterface
  * @package Mix\WebSocket\Interceptor
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-interface InterceptorInterface
+interface WebSocketInterceptorInterface
 {
 
     /**

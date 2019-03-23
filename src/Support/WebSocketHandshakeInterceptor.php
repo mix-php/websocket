@@ -6,11 +6,11 @@ use Mix\Http\Message\Request;
 use Mix\Http\Message\Response;
 
 /**
- * Class HandshakeInterceptor
+ * Class WebSocketHandshakeInterceptor
  * @package Mix\WebSocket\Support
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class HandshakeInterceptor
+class WebSocketHandshakeInterceptor
 {
 
     /**

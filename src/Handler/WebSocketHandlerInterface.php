@@ -13,7 +13,7 @@ use Mix\WebSocket\WebSocketConnection;
  */
 interface WebSocketHandlerInterface
 {
-
+    
     /**
      * 开启连接
      * @param WebSocketConnection $ws
