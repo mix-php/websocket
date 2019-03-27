@@ -8,7 +8,7 @@ use Mix\Http\Message\Response;
 /**
  * Interface WebSocketInterceptorInterface
  * @package Mix\WebSocket\Interceptor
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 interface WebSocketInterceptorInterface
 {

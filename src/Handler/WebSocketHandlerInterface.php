@@ -9,7 +9,7 @@ use Mix\WebSocket\WebSocketConnection;
 /**
  * Interface WebSocketHandlerInterface
  * @package Mix\WebSocket\Handler
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 interface WebSocketHandlerInterface
 {

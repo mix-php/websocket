@@ -8,7 +8,7 @@ use Mix\Core\Component\ComponentInterface;
 /**
  * Class WebSocketConnection
  * @package Mix\WebSocket
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class WebSocketConnection extends AbstractComponent
 {

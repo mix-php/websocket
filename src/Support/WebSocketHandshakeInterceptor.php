@@ -8,7 +8,7 @@ use Mix\Http\Message\Response;
 /**
  * Class WebSocketHandshakeInterceptor
  * @package Mix\WebSocket\Support
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class WebSocketHandshakeInterceptor
 {

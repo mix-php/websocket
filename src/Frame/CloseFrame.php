@@ -8,7 +8,7 @@ use Mix\Core\Bean\ObjectTrait;
 /**
  * Class CloseFrame
  * @package Mix\WebSocket\Frame
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class CloseFrame extends \Swoole\WebSocket\CloseFrame implements ObjectInterface
 {

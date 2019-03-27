@@ -10,7 +10,7 @@ use Mix\WebSocket\Interceptor\WebSocketInterceptorInterface;
 /**
  * Class Registry
  * @package Mix\WebSocket
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class Registry extends AbstractComponent
 {

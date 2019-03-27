@@ -9,7 +9,7 @@ use \Swoole\WebSocket\Frame;
 /**
  * Class TextFrame
  * @package Mix\WebSocket\Frame
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class TextFrame extends Frame implements ObjectInterface
 {
