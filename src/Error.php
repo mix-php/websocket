@@ -61,19 +61,15 @@ class Error extends AbstractComponent
     protected static function log($errors)
     {
         // 构造消息
-        $message = "{$errors['message']}" . PHP_EOL;
-        $message .= "[type] {$errors['type']} [code] {$errors['code']}" . PHP_EOL;
-        $message .= "[file] {$errors['file']} [line] {$errors['line']}" . PHP_EOL;
-        $message .= "[trace] {$errors['trace']}";
-        if (\Mix::$app->isRunning('request')) {
-            $message .= PHP_EOL . '$SERVER' . substr(print_r(\Mix::$app->request->server(), true), 5);
-            $message .= '$HEADER' . substr(print_r(\Mix::$app->request->header(), true), 5);
-            $message .= '$GET' . substr(print_r(\Mix::$app->request->get(), true), 5);
-            $message .= '$POST' . substr(print_r(\Mix::$app->request->post(), true), 5, -1);
-        }
+        $message = <<<EOL
+{message}
+[type] {type} [code] {code}
+[file] {file} [line] {line}
+[trace] {trace}
+EOL;
         // 写入
-        $errorType = \Mix\Core\Error::getType($errors['code']);
-        switch ($errorType) {
+        $level = \Mix\Core\Error::getLevel($errors['code']);
+        switch ($level) {
             case 'error':
                 \Mix::$app->log->error($message);
                 break;
