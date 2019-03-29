@@ -71,13 +71,13 @@ EOL;
         $level = \Mix\Core\Error::getLevel($errors['code']);
         switch ($level) {
             case 'error':
-                \Mix::$app->log->error($message);
+                \Mix::$app->log->error($message, $errors);
                 break;
             case 'warning':
-                \Mix::$app->log->warning($message);
+                \Mix::$app->log->warning($message, $errors);
                 break;
             case 'notice':
-                \Mix::$app->log->notice($message);
+                \Mix::$app->log->notice($message, $errors);
                 break;
         }
     }
