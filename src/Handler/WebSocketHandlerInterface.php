@@ -2,7 +2,7 @@
 
 namespace Mix\WebSocket\Handler;
 
-use Mix\Http\Message\Request;
+use Mix\Http\Message\Request\HttpRequest;
 use Mix\WebSocket\Frame;
 use Mix\WebSocket\WebSocketConnection;
 
