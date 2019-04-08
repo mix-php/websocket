@@ -15,8 +15,9 @@ interface WebSocketInterceptorInterface
 
     /**
      * 握手
-     * @param Request $request
+     * @param HttpRequest $request
+     * @param HttpResponse $response
      */
-    public function handshake(Request $request, Response $response);
+    public function handshake(HttpRequest $request, HttpResponse $response);
 
 }

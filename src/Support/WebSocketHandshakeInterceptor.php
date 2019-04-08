@@ -15,10 +15,10 @@ class WebSocketHandshakeInterceptor
 
     /**
      * 握手
-     * @param Request $request
-     * @param Response $response
+     * @param HttpRequest $request
+     * @param HttpResponse $response
      */
-    public function handshake(Request $request, Response $response)
+    public function handshake(HttpRequest $request, HttpResponse $response)
     {
         $secWebSocketKey = $request->header('sec-websocket-key');
         $patten          = '#^[+/0-9A-Za-z]{21}[AQgw]==$#';
