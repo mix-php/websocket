@@ -61,12 +61,10 @@ class Error extends AbstractComponent
     protected static function log($errors)
     {
         // 构造消息
-        $message = <<<EOL
-{message}
-[type] {type} [code] {code}
-[file] {file} [line] {line}
-[trace] {trace}
-EOL;
+        $message = "{message}\n[code] {code} [type] {type}\n[file] {file} [line] {line}\n[trace] {trace}";
+        if (!\Mix::$app->appDebug) {
+            $message = "{message} [{code}] {type} in {file} line {line}";
+        }
         // 写入
         $level = \Mix\Core\Error::getLevel($errors['code']);
         switch ($level) {
