@@ -4,6 +4,7 @@ namespace Mix\WebSocket\Support;
 
 use Mix\Http\Message\Request\HttpRequest;
 use Mix\Http\Message\Response\HttpResponse;
+use Mix\WebSocket\WebSocketConnection;
 
 /**
  * Class WebSocketHandshakeInterceptor
@@ -18,13 +19,14 @@ class WebSocketHandshakeInterceptor
      * @param HttpRequest $request
      * @param HttpResponse $response
      */
-    public function handshake(HttpRequest $request, HttpResponse $response)
+    public function handshake(WebSocketConnection $ws, HttpRequest $request, HttpResponse $response)
     {
         $secWebSocketKey = $request->header('sec-websocket-key');
         $patten          = '#^[+/0-9A-Za-z]{21}[AQgw]==$#';
         if ($request->header('sec-websocket-version') != 13 || 0 === preg_match($patten, $secWebSocketKey) || 16 !== strlen(base64_decode($secWebSocketKey))) {
             $response->statusCode = 400;
             $response->send();
+            $ws->disconnect();
             return;
         }
         $key     = base64_encode(sha1(

@@ -4,6 +4,7 @@ namespace Mix\WebSocket\Interceptor;
 
 use Mix\Http\Message\Request\HttpRequest;
 use Mix\Http\Message\Response\HttpResponse;
+use Mix\WebSocket\WebSocketConnection;
 
 /**
  * Interface WebSocketInterceptorInterface
@@ -15,9 +16,10 @@ interface WebSocketInterceptorInterface
 
     /**
      * 握手
+     * @param WebSocketConnection $ws
      * @param HttpRequest $request
      * @param HttpResponse $response
      */
-    public function handshake(HttpRequest $request, HttpResponse $response);
+    public function handshake(WebSocketConnection $ws, HttpRequest $request, HttpResponse $response);
 
 }
