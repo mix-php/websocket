@@ -23,7 +23,7 @@ class WebSocketHandshakeInterceptor
         $secWebSocketKey = $request->header('sec-websocket-key');
         $patten          = '#^[+/0-9A-Za-z]{21}[AQgw]==$#';
         if ($request->header('sec-websocket-version') != 13 || 0 === preg_match($patten, $secWebSocketKey) || 16 !== strlen(base64_decode($secWebSocketKey))) {
-            $response->statusCode = 500;
+            $response->statusCode = 400;
             $response->send();
             return;
         }
