@@ -19,7 +19,7 @@ class Error extends AbstractComponent
      * 协程模式
      * @var int
      */
-    public static $coroutineMode = ComponentInterface::COROUTINE_MODE_REFERENCE;
+    const COROUTINE_MODE = ComponentInterface::COROUTINE_MODE_REFERENCE;
 
     /**
      * 错误级别
