@@ -15,7 +15,7 @@ class WebSocketConnection extends AbstractComponent
 
     /**
      * 服务
-     * @var \Swoole\Server
+     * @var \Swoole\WebSocket\Server
      */
     public $server;
 
@@ -29,7 +29,7 @@ class WebSocketConnection extends AbstractComponent
      * 前置初始化
      * @return void
      */
-    public function beforeInitialize(\Swoole\Server $server, int $fd)
+    public function beforeInitialize(\Swoole\WebSocket\Server $server, int $fd)
     {
         $this->server = $server;
         $this->fd     = $fd;
