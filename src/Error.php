@@ -46,12 +46,12 @@ class Error extends AbstractComponent
         ];
         // 日志处理
         if (!($e instanceof \Mix\Exception\NotFoundException)) {
-            self::log($errors);
+            static::log($errors);
         }
         // 发送客户端
-        self::send($errors);
+        static::send($errors);
         // 关闭连接
-        self::close($errors);
+        static::close($errors);
     }
 
     /**
