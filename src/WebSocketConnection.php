@@ -52,7 +52,11 @@ class WebSocketConnection extends AbstractComponent
      */
     public function push(\Swoole\WebSocket\Frame $frame)
     {
-        return $this->server->push($this->fd, $frame);
+        $fd = $this->fd;
+        if (!$this->server->exist($fd) || !$this->server->isEstablished($fd)) {
+            return false;
+        }
+        return $this->server->push($fd, $frame);
     }
 
     /**
