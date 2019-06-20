@@ -2,8 +2,6 @@
 
 namespace Mix\WebSocket;
 
-use Mix\Core\Application\ComponentInitializeTrait;
-
 /**
  * Class Application
  * @package Mix\WebSocket
@@ -11,8 +9,6 @@ use Mix\Core\Application\ComponentInitializeTrait;
  */
 class Application extends \Mix\Core\Application
 {
-
-    use ComponentInitializeTrait;
 
     /**
      * 执行握手
