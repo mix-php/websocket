@@ -2,8 +2,8 @@
 
 namespace Mix\WebSocket;
 
-use Mix\Core\Component\ComponentInterface;
-use Mix\Core\Component\AbstractComponent;
+use Mix\Component\ComponentInterface;
+use Mix\Component\AbstractComponent;
 use Mix\WebSocket\Handler\WebSocketHandlerInterface;
 use Mix\WebSocket\Interceptor\WebSocketInterceptorInterface;
 
