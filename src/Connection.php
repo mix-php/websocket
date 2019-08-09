@@ -18,6 +18,11 @@ class Connection
     public $swooleResponse;
 
     /**
+     * @var bool
+     */
+    protected $closed = false;
+
+    /**
      * Connection constructor.
      * @param \Swoole\Http\Response $response
      */
@@ -32,11 +37,21 @@ class Connection
      */
     public function recv()
     {
-        $data = $this->swooleConnection->recv();
-        if ($data === false) {
+        if ($this->closed) { // 丢弃关闭后的消息
+            $errCode = 104;
+            $errMsg  = swoole_strerror($errCode, 9);
+            throw new ReceiveException($errMsg, $errCode);
+        }
+        $data = $this->swooleResponse->recv();
+        if ($data === false) { // 接收失败
             $this->close();
             $errCode = swoole_last_error();
-            $errMsg  = swoole_strerror($code, 9);
+            $errMsg  = swoole_strerror($errCode, 9);
+            throw new ReceiveException($errMsg, $errCode);
+        }
+        if ($data === "") { // 连接关闭
+            $errCode = 104;
+            $errMsg  = swoole_strerror($errCode, 9);
             throw new ReceiveException($errMsg, $errCode);
         }
         return $data;
@@ -58,7 +73,9 @@ class Connection
      */
     public function close()
     {
-        $closeFrame = new \Swoole\WebSocket\CloseFrame();
+        // 由于 Swoole 并没有提供 $ws->close() 导致只能使用这种怪异的方式关闭连接 : https://wiki.swoole.com/wiki/page/1115.html
+        $closeFrame   = new \Swoole\WebSocket\CloseFrame();
+        $this->closed = true;
         return $this->send($closeFrame);
     }
 

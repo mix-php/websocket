@@ -23,7 +23,7 @@ class Upgrader
     {
         $swooleResponse = $response->swooleResponse;
         $swooleResponse->upgrade();
-        return new Connection($response);
+        return new Connection($swooleResponse);
     }
 
 }
