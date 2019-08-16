@@ -33,7 +33,7 @@ class Connection
 
     /**
      * Recv
-     * @return mixed
+     * @return \Swoole\WebSocket\Frame
      */
     public function recv()
     {
@@ -42,19 +42,24 @@ class Connection
             $errMsg  = swoole_strerror($errCode, 9);
             throw new ReceiveException($errMsg, $errCode);
         }
-        $data = $this->swooleResponse->recv();
-        if ($data === false) { // 接收失败
+        $frame = $this->swooleResponse->recv();
+        if ($frame === false) { // 接收失败
             $this->close();
             $errCode = swoole_last_error();
             $errMsg  = swoole_strerror($errCode, 9);
             throw new ReceiveException($errMsg, $errCode);
         }
-        if ($data === "") { // 连接关闭
+        if ($frame === "") { // 连接关闭
             $errCode = 104;
             $errMsg  = swoole_strerror($errCode, 9);
             throw new ReceiveException($errMsg, $errCode);
         }
-        return $data;
+        if ($frame instanceof \Swoole\WebSocket\CloseFrame) { // CloseFrame
+            $errCode = $frame->code;
+            $errMsg  = $frame->reason;
+            throw new ReceiveException($errMsg, $errCode);
+        }
+        return $frame;
     }
 
     /**
