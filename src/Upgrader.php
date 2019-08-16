@@ -14,6 +14,19 @@ class Upgrader
 {
 
     /**
+     * @var ConnectionManager
+     */
+    public $connectionManager;
+
+    /**
+     * Upgrader constructor.
+     */
+    public function __construct()
+    {
+        $this->connectionManager = new ConnectionManager();
+    }
+
+    /**
      * Upgrade
      * @param ServerRequest $request
      * @param Response $response
@@ -21,9 +34,21 @@ class Upgrader
      */
     public function Upgrade(ServerRequest $request, Response $response)
     {
-        $swooleResponse = $response->swooleResponse;
+        $swooleRequest  = $request->getSwooleRequest();
+        $swooleResponse = $response->getSwooleResponse();
         $swooleResponse->upgrade();
-        return new Connection($swooleResponse);
+        /** @var ConnectionManager $connectionManager */
+        $connection = new Connection($swooleResponse);
+        $this->connectionManager->add($swooleRequest->fd, $connection);
+        return $connection;
+    }
+
+    /**
+     * Destroy
+     */
+    public function destroy()
+    {
+        $this->connectionManager->closeAll();
     }
 
 }
