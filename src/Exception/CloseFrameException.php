@@ -3,10 +3,10 @@
 namespace Mix\WebSocket\Exception;
 
 /**
- * Class ReceiveException
+ * Class CloseFrameException
  * @package Mix\WebSocket\Exception
  * @author liu,jian <coder.keda@gmail.com>
  */
-class ReceiveException extends \RuntimeException
+class CloseFrameException extends \RuntimeException
 {
 }

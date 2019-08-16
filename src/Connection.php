@@ -2,7 +2,8 @@
 
 namespace Mix\WebSocket;
 
-use Mix\WebSocket\Exception\ReceiveException;
+use Mix\WebSocket\Exception\CloseFrameException;
+use Mix\WebSocket\Exception\ReceiveFailureException;
 
 /**
  * Class Connection
@@ -37,27 +38,26 @@ class Connection
      */
     public function recv()
     {
-        if ($this->closed) { // 丢弃关闭后的消息
+        if ($this->closed) { // 主动关闭, 丢弃关闭后的消息
             $errCode = 104;
             $errMsg  = swoole_strerror($errCode, 9);
-            throw new ReceiveException($errMsg, $errCode);
+            throw new ReceiveFailureException($errMsg, $errCode);
         }
         $frame = $this->swooleResponse->recv();
         if ($frame === false) { // 接收失败
-            $this->close();
             $errCode = swoole_last_error();
             $errMsg  = swoole_strerror($errCode, 9);
-            throw new ReceiveException($errMsg, $errCode);
-        }
-        if ($frame === "") { // 连接关闭
-            $errCode = 104;
-            $errMsg  = swoole_strerror($errCode, 9);
-            throw new ReceiveException($errMsg, $errCode);
+            throw new ReceiveFailureException($errMsg, $errCode);
         }
         if ($frame instanceof \Swoole\WebSocket\CloseFrame) { // CloseFrame
             $errCode = $frame->code;
             $errMsg  = $frame->reason;
-            throw new ReceiveException($errMsg, $errCode);
+            throw new CloseFrameException($errMsg, $errCode);
+        }
+        if ($frame === "") { // 连接关闭
+            $errCode = 104;
+            $errMsg  = swoole_strerror($errCode, 9);
+            throw new ReceiveFailureException($errMsg, $errCode);
         }
         return $frame;
     }
@@ -79,8 +79,10 @@ class Connection
     public function close()
     {
         // 由于 Swoole 并没有提供 $ws->close() 导致只能使用这种怪异的方式关闭连接 : https://wiki.swoole.com/wiki/page/1115.html
-        $closeFrame   = new \Swoole\WebSocket\CloseFrame();
-        $this->closed = true;
+        $closeFrame         = new \Swoole\WebSocket\CloseFrame();
+        $closeFrame->code   = 1000;
+        $closeFrame->reason = '';
+        $this->closed       = true;
         return $this->send($closeFrame);
     }
 
