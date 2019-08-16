@@ -78,12 +78,12 @@ class Connection
      */
     public function close()
     {
-//        // 由于 Swoole 并没有提供 $ws->close() 导致只能使用这种怪异的方式关闭连接 : https://wiki.swoole.com/wiki/page/1115.html
-//        $closeFrame         = new \Swoole\WebSocket\CloseFrame();
-//        $closeFrame->code   = 1000;
-//        $closeFrame->reason = '';
-//        $this->closed       = true;
-//        return $this->send($closeFrame);
+        // 由于 Swoole 并没有提供 $ws->close() 导致只能使用这种怪异的方式关闭连接 : https://wiki.swoole.com/wiki/page/1115.html
+        $closeFrame         = new \Swoole\WebSocket\CloseFrame();
+        $closeFrame->code   = 1000;
+        $closeFrame->reason = '';
+        $this->closed       = true;
+        return $this->send($closeFrame);
     }
 
 }
