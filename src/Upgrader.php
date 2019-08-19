@@ -4,6 +4,7 @@ namespace Mix\WebSocket;
 
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
+use Mix\WebSocket\Exception\UpgradeException;
 
 /**
  * Class Upgrader
@@ -34,6 +35,16 @@ class Upgrader
      */
     public function Upgrade(ServerRequest $request, Response $response)
     {
+        // Handshake verification
+        if ($request->getHeaderLine('Connection') !== 'Upgrade' /*|| $request->getHeaderLine('Upgrade') !== 'websocket'*/) {
+            throw new UpgradeException('Handshake failed, invalid WebSocket request');
+        }
+        $secWebSocketKey = $request->getHeaderLine('sec-websocket-key');
+        $patten          = '#^[+/0-9A-Za-z]{21}[AQgw]==$#';
+        if ($request->getHeaderLine('sec-websocket-version') != 13 || 0 === preg_match($patten, $secWebSocketKey) || 16 !== strlen(base64_decode($secWebSocketKey))) {
+            throw new UpgradeException('Handshake failed, invalid WebSocket protocol v13');
+        }
+        // Upgrade
         $swooleRequest  = $request->getSwooleRequest();
         $swooleResponse = $response->getSwooleResponse();
         $swooleResponse->upgrade();
