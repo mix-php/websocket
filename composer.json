@@ -17,7 +17,7 @@
   ],
   "require": {
     "php": ">=7.0.0",
-    "mix/http-message": "v2.1.x-dev"
+    "mix/http-message": "v2.1.0-beta"
   },
   "autoload": {
     "psr-4": {
