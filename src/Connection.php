@@ -19,6 +19,11 @@ class Connection
     public $swooleResponse;
 
     /**
+     * @var ConnectionManager
+     */
+    public $connectionManager;
+
+    /**
      * @var bool
      */
     protected $closed = false;
@@ -27,9 +32,10 @@ class Connection
      * Connection constructor.
      * @param \Swoole\Http\Response $response
      */
-    public function __construct(\Swoole\Http\Response $response)
+    public function __construct(\Swoole\Http\Response $response, ConnectionManager $connectionManager)
     {
-        $this->swooleResponse = $response;
+        $this->swooleResponse    = $response;
+        $this->connectionManager = $connectionManager;
     }
 
     /**
@@ -45,16 +51,19 @@ class Connection
         }
         $frame = $this->swooleResponse->recv();
         if ($frame === false) { // 接收失败
+            $this->close();
             $errCode = swoole_last_error();
             $errMsg  = swoole_strerror($errCode, 9);
             throw new ReceiveFailureException($errMsg, $errCode);
         }
         if ($frame instanceof \Swoole\WebSocket\CloseFrame) { // CloseFrame
+            $this->close();
             $errCode = $frame->code;
             $errMsg  = $frame->reason;
             throw new CloseFrameException($errMsg, $errCode);
         }
         if ($frame === "") { // 连接关闭
+            $this->close();
             $errCode = 104;
             $errMsg  = swoole_strerror($errCode, 9);
             throw new ReceiveFailureException($errMsg, $errCode);
@@ -78,7 +87,11 @@ class Connection
      */
     public function close()
     {
+        $this->connectionManager->remove($this->swooleResponse->fd);
         // 由于 Swoole 并没有提供 $ws->close() 导致只能使用这种怪异的方式关闭连接 : https://wiki.swoole.com/wiki/page/1115.html
+        if ($this->closed) {
+            return false;
+        }
         $closeFrame         = new \Swoole\WebSocket\CloseFrame();
         $closeFrame->code   = 1000;
         $closeFrame->reason = '';

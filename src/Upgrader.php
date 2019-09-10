@@ -49,7 +49,7 @@ class Upgrader
         $swooleResponse = $response->getSwooleResponse();
         $swooleResponse->upgrade();
         /** @var ConnectionManager $connectionManager */
-        $connection = new Connection($swooleResponse);
+        $connection = new Connection($swooleResponse, $this->connectionManager);
         $this->connectionManager->add($swooleRequest->fd, $connection);
         return $connection;
     }
