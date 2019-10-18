@@ -44,11 +44,6 @@ class Connection
      */
     public function recv()
     {
-        if ($this->closed) { // 主动关闭, 丢弃关闭后的消息
-            $errCode = 104;
-            $errMsg  = swoole_strerror($errCode, 9);
-            throw new ReceiveFailureException($errMsg, $errCode);
-        }
         $frame = $this->swooleResponse->recv();
         if ($frame === false) { // 接收失败
             $this->close();
@@ -88,15 +83,7 @@ class Connection
     public function close()
     {
         $this->connectionManager->remove($this->swooleResponse->fd);
-        // 由于 Swoole 并没有提供 $ws->close() 导致只能使用这种怪异的方式关闭连接 : https://wiki.swoole.com/wiki/page/1115.html
-        if ($this->closed) {
-            return false;
-        }
-        $closeFrame         = new \Swoole\WebSocket\CloseFrame();
-        $closeFrame->code   = 1000;
-        $closeFrame->reason = '';
-        $this->closed       = true;
-        return $this->send($closeFrame);
+        return $this->swooleResponse->close();
     }
 
 }
