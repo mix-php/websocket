@@ -3,7 +3,7 @@
 namespace Mix\WebSocket;
 
 use Mix\WebSocket\Exception\CloseFrameException;
-use Mix\WebSocket\Exception\ReceiveFailureException;
+use Mix\WebSocket\Exception\ReceiveException;
 
 /**
  * Class Connection
@@ -49,7 +49,7 @@ class Connection
             $this->close();
             $errCode = swoole_last_error();
             $errMsg  = swoole_strerror($errCode, 9);
-            throw new ReceiveFailureException($errMsg, $errCode);
+            throw new ReceiveException($errMsg, $errCode);
         }
         if ($frame instanceof \Swoole\WebSocket\CloseFrame) { // CloseFrame
             $this->close();
@@ -61,7 +61,7 @@ class Connection
             $this->close();
             $errCode = 104;
             $errMsg  = swoole_strerror($errCode, 9);
-            throw new ReceiveFailureException($errMsg, $errCode);
+            throw new ReceiveException($errMsg, $errCode);
         }
         return $frame;
     }

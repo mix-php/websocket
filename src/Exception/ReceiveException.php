@@ -3,10 +3,10 @@
 namespace Mix\WebSocket\Exception;
 
 /**
- * Class ReceiveFailureException
+ * Class ReceiveException
  * @package Mix\WebSocket\Exception
  * @author liu,jian <coder.keda@gmail.com>
  */
-class ReceiveFailureException extends \RuntimeException
+class ReceiveException extends \RuntimeException
 {
 }
