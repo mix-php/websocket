@@ -4,6 +4,7 @@ namespace Mix\WebSocket;
 
 use Mix\WebSocket\Exception\CloseFrameException;
 use Mix\WebSocket\Exception\ReceiveException;
+use Mix\WebSocket\Exception\SendException;
 
 /**
  * Class Connection
@@ -73,7 +74,11 @@ class Connection
      */
     public function send(\Swoole\WebSocket\Frame $data)
     {
-        return $this->swooleResponse->push($data);
+        $result = $this->swooleResponse->push($data);
+        if ($result === false) {
+            throw new SendException($this->swooleResponse->socket->errMsg, $this->swooleResponse->socket->errCode);
+        }
+        return true;
     }
 
     /**
