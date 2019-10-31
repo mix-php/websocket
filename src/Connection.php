@@ -2,6 +2,7 @@
 
 namespace Mix\WebSocket;
 
+use Mix\WebSocket\Exception\CloseException;
 use Mix\WebSocket\Exception\CloseFrameException;
 use Mix\WebSocket\Exception\ReceiveException;
 use Mix\WebSocket\Exception\SendException;
@@ -69,8 +70,7 @@ class Connection
 
     /**
      * Send
-     * @param $data
-     * @return bool
+     * @param \Swoole\WebSocket\Frame $data
      */
     public function send(\Swoole\WebSocket\Frame $data)
     {
@@ -78,17 +78,17 @@ class Connection
         if ($result === false) {
             throw new SendException($this->swooleResponse->socket->errMsg, $this->swooleResponse->socket->errCode);
         }
-        return true;
     }
 
     /**
      * Close
-     * @return bool
      */
     public function close()
     {
+        if (!$this->swooleResponse->close()) {
+            throw new CloseException($this->swooleResponse->socket->errMsg, $this->swooleResponse->socket->errCode);
+        }
         $this->connectionManager->remove($this->swooleResponse->fd);
-        return $this->swooleResponse->close();
     }
 
 }
