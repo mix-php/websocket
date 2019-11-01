@@ -2,10 +2,8 @@
 
 namespace Mix\WebSocket;
 
-use Mix\WebSocket\Exception\CloseException;
 use Mix\WebSocket\Exception\CloseFrameException;
 use Mix\WebSocket\Exception\ReceiveException;
-use Mix\WebSocket\Exception\SendException;
 
 /**
  * Class Connection
@@ -76,7 +74,7 @@ class Connection
     {
         $result = $this->swooleResponse->push($data);
         if ($result === false) {
-            throw new SendException($this->swooleResponse->socket->errMsg, $this->swooleResponse->socket->errCode);
+            throw new \Swoole\Exception($this->swooleResponse->socket->errMsg, $this->swooleResponse->socket->errCode);
         }
     }
 
@@ -94,7 +92,7 @@ class Connection
             if ($errMsg == 'Connection reset by peer' && $errCode == 104) {
                 return;
             }
-            throw new CloseException($errMsg, $errCode);
+            throw new \Swoole\Exception($errMsg, $errCode);
         }
         $this->connectionManager->remove($this->swooleResponse->fd);
     }
