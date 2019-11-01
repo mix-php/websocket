@@ -86,7 +86,15 @@ class Connection
     public function close()
     {
         if (!$this->swooleResponse->close()) {
-            throw new CloseException($this->swooleResponse->socket->errMsg, $this->swooleResponse->socket->errCode);
+            $errMsg  = $this->swooleResponse->socket->errMsg;
+            $errCode = $this->swooleResponse->socket->errCode;
+            if ($errMsg == '' && $errCode == 0) {
+                return;
+            }
+            if ($errMsg == 'Connection reset by peer' && $errCode == 104) {
+                return;
+            }
+            throw new CloseException($errMsg, $errCode);
         }
         $this->connectionManager->remove($this->swooleResponse->fd);
     }
