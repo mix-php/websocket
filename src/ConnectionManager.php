@@ -29,7 +29,6 @@ class ConnectionManager
      * 移除连接
      * 这里不可关闭连接，因为这个方法是在关闭连接中调用的
      * @param Connection $connection
-     * @throws \Swoole\Exception
      */
     public function remove(Connection $connection)
     {
@@ -51,6 +50,7 @@ class ConnectionManager
 
     /**
      * 关闭全部连接
+     * @throws \Swoole\Exception
      */
     public function closeAll()
     {

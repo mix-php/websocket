@@ -47,7 +47,6 @@ class Upgrader
         // Upgrade
         $swooleResponse = $response->getSwooleResponse();
         $swooleResponse->upgrade();
-        /** @var ConnectionManager $connectionManager */
         $connection = new Connection($swooleResponse, $this->connectionManager);
         $this->connectionManager->add($connection);
         return $connection;
@@ -55,6 +54,7 @@ class Upgrader
 
     /**
      * Destroy
+     * @throws \Swoole\Exception
      */
     public function destroy()
     {

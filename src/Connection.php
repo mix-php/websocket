@@ -24,13 +24,9 @@ class Connection
     public $connectionManager;
 
     /**
-     * @var bool
-     */
-    protected $closed = false;
-
-    /**
      * Connection constructor.
      * @param \Swoole\Http\Response $response
+     * @param ConnectionManager $connectionManager
      */
     public function __construct(\Swoole\Http\Response $response, ConnectionManager $connectionManager)
     {
@@ -41,6 +37,7 @@ class Connection
     /**
      * Recv
      * @return \Swoole\WebSocket\Frame
+     * @throws \Swoole\Exception
      */
     public function recv()
     {
@@ -69,20 +66,20 @@ class Connection
     /**
      * Send
      * @param \Swoole\WebSocket\Frame $data
+     * @throws \Swoole\Exception
      */
     public function send(\Swoole\WebSocket\Frame $data)
     {
         $result = $this->swooleResponse->push($data);
         if ($result === false) {
-            $socket  = $this->swooleResponse->socket;
-            $errMsg  = $socket->errMsg;
-            $errCode = $socket->errCode;
-            throw new \Swoole\Exception($errMsg, $errCode);
+            $socket = $this->swooleResponse->socket;
+            throw new \Swoole\Exception($socket->errMsg, $socket->errCode);
         }
     }
 
     /**
      * Close
+     * @throws \Swoole\Exception
      */
     public function close()
     {
