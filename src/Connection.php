@@ -83,7 +83,7 @@ class Connection
      */
     public function close()
     {
-        if (!$this->swooleResponse->close()) {
+        if (!$this->swooleResponse->close()) { // swoole >= 4.4.8 才支持 close, 4.4.13 ~ 4.4.14 重复关闭连接会抛出警告
             $errMsg  = $this->swooleResponse->socket->errMsg;
             $errCode = $this->swooleResponse->socket->errCode;
             if ($errMsg == '' && $errCode == 0) {
