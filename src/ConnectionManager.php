@@ -17,21 +17,27 @@ class ConnectionManager
 
     /**
      * 新增连接
-     * @param int $fd
      * @param Connection $connection
      */
-    public function add(int $fd, Connection $connection)
+    public function add(Connection $connection)
     {
-        $this->connections[$fd] = $connection;
+        $id                     = spl_object_hash($connection);
+        $this->connections[$id] = $connection;
     }
 
     /**
      * 移除连接
-     * @param int $fd
+     * 这里不可关闭连接，因为这个方法是在关闭连接中调用的
+     * @param Connection $connection
+     * @throws \Swoole\Exception
      */
-    public function remove(int $fd)
+    public function remove(Connection $connection)
     {
-        unset($this->connections[$fd]);
+        $id = spl_object_hash($connection);
+        if (!isset($this->connections[$id])) {
+            return;
+        }
+        unset($this->connections[$id]);
     }
 
     /**
@@ -48,9 +54,9 @@ class ConnectionManager
      */
     public function closeAll()
     {
-        foreach ($this->connections as $fd => $connection) {
+        foreach ($this->connections as $connection) {
             $connection->close();
-            $this->remove($fd);
+            $this->remove($connection);
         }
     }
 

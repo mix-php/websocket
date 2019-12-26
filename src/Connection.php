@@ -74,7 +74,10 @@ class Connection
     {
         $result = $this->swooleResponse->push($data);
         if ($result === false) {
-            throw new \Swoole\Exception($this->swooleResponse->socket->errMsg, $this->swooleResponse->socket->errCode);
+            $socket  = $this->swooleResponse->socket;
+            $errMsg  = $socket->errMsg;
+            $errCode = $socket->errCode;
+            throw new \Swoole\Exception($errMsg, $errCode);
         }
     }
 
@@ -83,9 +86,12 @@ class Connection
      */
     public function close()
     {
-        if (!$this->swooleResponse->close()) { // swoole >= 4.4.8 才支持 close, 4.4.13 ~ 4.4.14 重复关闭连接会抛出警告
-            $errMsg  = $this->swooleResponse->socket->errMsg;
-            $errCode = $this->swooleResponse->socket->errCode;
+        // Swoole >= 4.4.8 才支持 close
+        // 但在 4.4.13 ~ 4.4.14 server shutdown 后 close 会抛出 http response is unavailable 警告，需升级 Swoole 版本
+        if (!$this->swooleResponse->close()) {
+            $socket  = $this->swooleResponse->socket;
+            $errMsg  = $socket->errMsg;
+            $errCode = $socket->errCode;
             if ($errMsg == '' && $errCode == 0) {
                 return;
             }
@@ -94,7 +100,7 @@ class Connection
             }
             throw new \Swoole\Exception($errMsg, $errCode);
         }
-        $this->connectionManager->remove($this->swooleResponse->fd);
+        $this->connectionManager->remove($this);
     }
 
 }

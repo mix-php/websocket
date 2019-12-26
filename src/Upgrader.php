@@ -45,12 +45,11 @@ class Upgrader
             throw new UpgradeException('Handshake failed, invalid WebSocket protocol v13');
         }
         // Upgrade
-        $swooleRequest  = $request->getSwooleRequest();
         $swooleResponse = $response->getSwooleResponse();
         $swooleResponse->upgrade();
         /** @var ConnectionManager $connectionManager */
         $connection = new Connection($swooleResponse, $this->connectionManager);
-        $this->connectionManager->add($swooleRequest->fd, $connection);
+        $this->connectionManager->add($connection);
         return $connection;
     }
 
